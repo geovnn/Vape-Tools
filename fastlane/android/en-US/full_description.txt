@@ -1,0 +1,6 @@
+Key Features:
+- Coil Calculator: Easily calculate the optimal resistance for your coils. Choose your wire type, gauge, and number of wraps to get precise results tailored to your vaping style.
+- E-Liquid Mixer: Create your own custom e-liquids with precision. Input your desired nicotine strength, VG/PG ratio, and flavor percentages, and Vape Tools will generate the exact recipe you need.
+- Saved Liquids: Keep track of your e-liquid creations with the Saved Liquids feature. Save your recipes and monitor their steeping time for the perfect vape every time.
+- Ohm’s Law Calculator: Ensure your builds are safe and efficient with the integrated Ohm’s Law calculator. Input your voltage, resistance, or current to get accurate results in seconds.
+- No Data Collection: Vape Tools respects your privacy.
