@@ -608,7 +608,7 @@ fun AddLiquidDialog(
                             onClick = { isClicked ->
                                 if (isClicked) {
                                     if (cameraPermissionState.status.isGranted) {
-                                        launcher.launch(tempImageUri)
+                                        tempImageUri?.let { launcher.launch(it) }
                                     } else {
                                         cameraPermissionState.launchPermissionRequest()
                                     }
