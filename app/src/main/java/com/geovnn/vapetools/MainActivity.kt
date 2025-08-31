@@ -8,8 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.geovnn.vapetools.data.db.LiquidDatabase
+import com.geovnn.vapetools.data.repository.LiquidRepository
 import com.geovnn.vapetools.ui.navigation.Navigation
-import com.geovnn.vapetools.ui.screens.saved_screen.SavedLiquidsViewModel
+import com.geovnn.vapetools.ui.screen.saved_screen.viewmodel.SavedLiquidsViewModel
 import com.geovnn.vapetools.ui.theme.VapeToolsTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,15 +23,27 @@ class MainActivity : ComponentActivity() {
         ).build()
     }
 
+    // Crea un'istanza del repository
+    private val liquidRepository by lazy {
+        LiquidRepository(db.dao)
+    }
+
+
     private val savedLiquidViewModel by viewModels<SavedLiquidsViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return SavedLiquidsViewModel(db.dao) as T
+                    // Inietta il repository nel ViewModel
+                    if (modelClass.isAssignableFrom(SavedLiquidsViewModel::class.java)) {
+                        @Suppress("UNCHECKED_CAST")
+                        return SavedLiquidsViewModel(liquidRepository) as T
+                    }
+                    throw IllegalArgumentException("Unknown ViewModel class")
                 }
             }
         }
     )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

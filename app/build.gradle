@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp'
+    id 'androidx.room'
 }
 android {
     namespace 'com.geovnn.vapetools'
@@ -53,6 +54,10 @@ android {
         includeInBundle = false
     }
 }
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.15.0'
@@ -86,4 +91,6 @@ dependencies {
     ksp "androidx.room:room-compiler:$room_version"
 
     implementation "com.google.accompanist:accompanist-permissions:0.32.0"
+
+    implementation "io.coil-kt:coil-compose:2.6.0"
 }

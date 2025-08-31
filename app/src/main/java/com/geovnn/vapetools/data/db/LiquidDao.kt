@@ -10,11 +10,14 @@ import kotlinx.coroutines.flow.Flow
 interface LiquidDao {
 
     @Upsert
-    suspend fun upsertLiquid(liquid: Liquid)
+    suspend fun upsertLiquid(liquid: LiquidDto)
 
     @Delete
-    suspend fun deleteLiquid(liquid: Liquid)
+    suspend fun deleteLiquid(liquid: LiquidDto)
 
-    @Query("SELECT * FROM liquid ORDER BY name ASC")
-    fun getLiquidsOrderedByName(): Flow<List<Liquid>>
+    @Query("SELECT * FROM liquiddto ORDER BY name ASC")
+    fun getLiquidsOrderedByName(): Flow<List<LiquidDto>>
+
+    @Query("SELECT * FROM liquiddto WHERE id = :id")
+    suspend fun getLiquidById(id: Int): LiquidDto?
 }
