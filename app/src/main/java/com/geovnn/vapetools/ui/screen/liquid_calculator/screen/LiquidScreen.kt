@@ -101,11 +101,11 @@ private fun LiquidsResultsBox(
                 .fillMaxWidth()
         ) {
             Text(
-                text = state.title,
+                text = state.title.asString(),
                 style = MaterialTheme.typography.headlineMedium
             )
             Text(
-                text = state.description,
+                text = state.description.asString(),
                 style = MaterialTheme.typography.titleMedium,
                 color = if (state.isError) MaterialTheme.colorScheme.error else Color.Unspecified,
             )
@@ -115,17 +115,17 @@ private fun LiquidsResultsBox(
                 ) {
                     Text(
                         modifier = Modifier.weight(1f),
-                        text = result.name
+                        text = result.name.asString()
                     )
                     Text(
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.End,
-                        text = result.volume
+                        text = result.volume.asString()
                     )
                     Text(
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.End,
-                        text = result.weight
+                        text = result.weight?.asString()?: ""
                     )
                 }
             }

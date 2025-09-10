@@ -2,7 +2,9 @@ package com.geovnn.vapetools.ui.screen.nicotine_blender.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.geovnn.vapetools.combine
+import com.geovnn.vapetools.R
+import com.geovnn.vapetools.helper.UiText
+import com.geovnn.vapetools.helper.combine
 import com.geovnn.vapetools.ui.common.composable.VapeComboBoxState
 import com.geovnn.vapetools.ui.common.composable.VapeTextFieldState
 import com.geovnn.vapetools.ui.common.composable.VapeTopAppBarState
@@ -13,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
-import java.util.Locale
 
 class NicotineViewModel: ViewModel() {
 
@@ -25,7 +26,7 @@ class NicotineViewModel: ViewModel() {
     val result = MutableStateFlow("")
 
 
-    val navBarFlow = flowOf(VapeTopAppBarState(title = "Nicotine Blender"))
+    val navBarFlow = flowOf(VapeTopAppBarState(title = UiText.StringResource(R.string.nicotine_blender_screen_title)))
 
 
     val contentFlow = combine(
@@ -46,66 +47,65 @@ class NicotineViewModel: ViewModel() {
         val aromaLoss = result?.let {
             val totalAmount = totalAmount.toDoubleOrNull()
             if (totalAmount==null) null else {
-                100 - ((totalAmount / (it+totalAmount)) * 100)
+                (100 - ((totalAmount / (it+totalAmount)) * 100)).toInt()
             }
         }
         NicotineUiState.Content(
             mode = VapeComboBoxState(
                 items = NicotineUiState.Mode.entries.map {
+                    val label = when (it) {
+                        NicotineUiState.Mode.ADD_NICOTINE -> UiText.StringResource(R.string.nicotine_blender_label_increase_nicotine)
+                        NicotineUiState.Mode.REMOVE_NICOTINE -> UiText.StringResource(R.string.nicotine_blender_label_decrease_nicotine)
+                    }
                     VapeComboBoxState.Item(
                         id = it.ordinal.toString(),
-                        string = it.name
+                        label = label
                     )
                 },
                 selectedItem = VapeComboBoxState.Item(
                     id = mode.ordinal.toString(),
-                    string = mode.name
+                    label = UiText.StringResource(R.string.nicotine_blender_result_remove)
                 )
             ),
             amount = VapeTextFieldState(
-                label = "Total amount",
-                measureUnit = "ml",
+                label = UiText.StringResource(R.string.label_target_total_amount),
+                measureUnit = UiText.StringResource(R.string.unit_ml),
                 text = totalAmount,
             ),
             currentNicotineStrength = VapeTextFieldState(
-                label = "Current nicotine strength",
-                measureUnit = "ml",
+                label = UiText.StringResource(R.string.label_current_nicotine_strength),
+                measureUnit = UiText.StringResource(R.string.unit_ml),
                 text = currentNicotineStrength,
             ),
             targetStrength = VapeTextFieldState(
-                label = "Target strength",
-                measureUnit = "ml",
+                label = UiText.StringResource(R.string.label_target_strength),
+                measureUnit = UiText.StringResource(R.string.unit_ml),
                 text = targetStrength,
                 isError = result==null
             ),
             shotStrength = VapeTextFieldState(
-                label = "Shot strength",
-                measureUnit = "ml",
+                label = UiText.StringResource(R.string.label_nicotine_shot_strength),
+                measureUnit = UiText.StringResource(R.string.unit_ml),
                 text = shotStrength,
             ),
             result =
                 NicotineUiState.Content.ResultsBoxState(
-                    title = "Results",
+                    title = UiText.StringResource(R.string.label_results),
                     isError = result==null,
                     description = when (mode) {
                         NicotineUiState.Mode.ADD_NICOTINE -> {
                             when (result) {
                                 null -> {
-                                    "Target strength must be greater than current strength"
+                                    UiText.StringResource(R.string.nicotine_blender_error_target_must_be_greater)
                                 }
                                 0.0 -> {
-                                    "Fill more inputs to see results"
+                                    UiText.StringResource(R.string.nicotine_blender_error_not_enough_inputs)
                                 }
                                 else -> {
-                                    String.format(
-                                        Locale.ENGLISH,
-                                        "Add %.2f ml of nicotine shot",
-                                        result
-                                    ) + if (aromaLoss != null) String.format(
-                                        Locale.ENGLISH,
-                                        " (Aroma will be %.1f%% less intense)",
-                                        aromaLoss
-                                    ) else ""
+                                    UiText.StringResource(
+                                        R.string.nicotine_blender_result_add,
+                                        result, aromaLoss?: 0
+                                    )
                                 }
                             }
                         }
@@ -113,21 +113,16 @@ class NicotineViewModel: ViewModel() {
                         NicotineUiState.Mode.REMOVE_NICOTINE -> {
                             when (result) {
                                 null -> {
-                                    "Target strength must be less than current strength"
+                                    UiText.StringResource(R.string.nicotine_blender_error_target_must_be_less)
                                 }
                                 0.0 -> {
-                                    "Fill more inputs to see results"
+                                    UiText.StringResource(R.string.nicotine_blender_error_not_enough_inputs)
                                 }
                                 else -> {
-                                    String.format(
-                                        Locale.ENGLISH,
-                                        "Add %.2f ml of nicotine free base",
-                                        result
-                                    ) + if (aromaLoss != null) String.format(
-                                        Locale.ENGLISH,
-                                        " (Aroma will be %.1f%% less intense)",
-                                        aromaLoss
-                                    ) else ""
+                                    UiText.StringResource(
+                                        R.string.nicotine_blender_result_remove,
+                                        result, aromaLoss ?: 0
+                                    )
                                 }
                             }
                         }
@@ -189,28 +184,6 @@ class NicotineViewModel: ViewModel() {
         }
     }
 
-//    private fun updateResult(result: Double) {
-//
-//        var normalizedString = String.Companion.format(Locale.ENGLISH,"%.2f",result)
-//
-//        if (result==0.0) {
-//            normalizedString = ""
-//        }
-//
-//        _uiState.update { currentState ->
-//            currentState.copy(
-//                resultAmount = normalizedString,
-//            )
-//        }
-//    }
-//
-//    private fun setError(flag: Boolean) {
-//        _uiState.update { currentState ->
-//            currentState.copy(
-//                isError = flag,
-//            )
-//        }
-//    }
 
     private fun calculateResults(
         mode : Int,

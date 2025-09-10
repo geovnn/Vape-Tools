@@ -10,6 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.geovnn.vapetools.helper.UiText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,7 +23,7 @@ fun VapeTopAppBar(
 ) {
     TopAppBar(
         modifier = modifier,
-        title = { Text(text = state.title) },
+        title = { state.title?.let { Text(text = state.title.asString()) } },
         navigationIcon = {
             IconButton(onClick =  openDrawer) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
@@ -32,5 +34,5 @@ fun VapeTopAppBar(
 }
 
 data class VapeTopAppBarState(
-    val title: String = "",
+    val title: UiText? = null,
 )

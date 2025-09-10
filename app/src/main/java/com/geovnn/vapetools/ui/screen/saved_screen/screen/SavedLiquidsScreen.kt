@@ -1,8 +1,6 @@
 package com.geovnn.vapetools.ui.screen.saved_screen.screen
 
 import android.Manifest
-import android.graphics.Bitmap
-import android.graphics.Matrix
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,19 +36,19 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.geovnn.vapetools.R
 import com.geovnn.vapetools.data.model.AromaType
 import com.geovnn.vapetools.ui.common.composable.LiquidParameters
 import com.geovnn.vapetools.ui.common.composable.VapeTextField
@@ -70,7 +68,6 @@ fun SavedScreen(
     uiState: SavedLiquidsState,
     openDrawer: () -> Unit,
 ) {
-    val context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -84,7 +81,7 @@ fun SavedScreen(
         floatingActionButton = {
             FloatingActionButton(onClick = viewModel::showNewLiquidDialog) {
                 Icon(imageVector = Icons.Default.Add,
-                    contentDescription = "Add liquid"
+                    contentDescription = stringResource(R.string.label_new_liquid)
                 )
             }
         }
@@ -95,121 +92,24 @@ fun SavedScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(
-                items = uiState.content.liquids,
+                items = uiState.content.liquids.liquids,
                 key = { item -> item.id }
             ) { liquid ->
-                var isExpanded by remember { mutableStateOf(false) }
-//                val extendedPath = File(context.filesDir, liquid.imageUri).absolutePath
-//                val bitmap by remember { mutableStateOf(BitmapFactory.decodeFile(extendedPath)) }
-                Card(
-                    modifier = Modifier
-                        .padding(8.dp),
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .clickable { isExpanded = !isExpanded}
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        Row {
-                            FiveStarRatingSelector(
-                                modifier =Modifier
-                                    .weight(1f),
-                                starSize = 22.dp,
-                                selectedStar = liquid.rating,
-                                getValue = {},
-                                clickable = false
-                            )
-                            Text(
-                                textAlign = TextAlign.Right,
-                                modifier =Modifier
-                                    .weight(1f),
-                                text = if(liquid.steepingDate!=null) {
-                                    liquid.steepingDate.toString() +" days steeping"
-                                } else {
-                                    ""
-                                }
-                            )
-                        }
-                        Row {
-                            Text(
-                                textAlign = TextAlign.Left,
-                                modifier = Modifier
-                                    .padding(vertical = 10.dp)
-                                    .weight(1f),
-                                text = liquid.name,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp
-                            )
-                        }
-                        Column(
-                            modifier=Modifier
-                                .fillMaxWidth()
-                        ){
-                            AnimatedVisibility(visible = isExpanded){
-                                Column(modifier=Modifier
-                                    .fillMaxWidth()){
-                                    Text(text = "Quantity: "+liquid.quantity.toString()+" ml")
-                                    Text(text = liquid.pgRatio.toString()+"PG/"+(100-liquid.pgRatio-liquid.additiveRatio).toString()+"VG/"+liquid.additiveRatio.toString()+"Additive")
-                                    Text(text = liquid.aromaRatio.toString()+"% Aroma")
-                                    Text(text = "Nicotine: " + liquid.nicotineStrength.toString() + " mg/ml")
-                                    if (liquid.note!="") {
-                                        Text(text = "Note: "+liquid.note)
-                                    }
-                                    if (liquid.imageUri!=null) {
-                                        ImageBox(imageUri = liquid.imageUri, onClick={})
-                                    }
-                                    Row(modifier=Modifier
-                                        .align(Alignment.Start)){
-                                        IconButton(
-                                            onClick = { viewModel.showEditLiquidDialog(liquid) },
-                                            modifier = Modifier
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Edit,
-                                                contentDescription = "Edit liquid"
-                                            )
-                                        }
-                                        IconButton(
-                                            onClick = {
-                                                viewModel.showDeleteDialog(liquid)
-                                            },
-                                            modifier = Modifier
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.DeleteForever,
-                                                contentDescription = "Delete liquid"
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                LiquidCard(
+                    state = liquid,
+                    onEditClick = { viewModel.showEditLiquidDialog(liquid) },
+                    onDeleteClick = { viewModel.showDeleteDialog(liquid) },
+                )
             }
         }
     }
 
+
     uiState.deleteDialog?.let {
-        AlertDialog(
-            title = {
-                Text(text = "Delete liquid")
-            },
-            text = {
-                Text(text = "Are you sure you want to delete this liquid?")
-            },
-            onDismissRequest = { viewModel::hideDeleteDialog },
-            confirmButton = {
-                TextButton(onClick = viewModel::deleteLiquid) {
-                    Text(text = "Confirm")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = viewModel::hideDeleteDialog ) {
-                    Text(text = "Cancel")
-                }
-            },
+        DeleteDialog(
+            state = it,
+            onDismiss = viewModel::hideDeleteDialog,
+            onConfirm = viewModel::deleteLiquid
         )
     }
 
@@ -226,18 +126,109 @@ fun SavedScreen(
             updateSteepingDate = viewModel::updateDialogSteepingDate,
             updateNote = viewModel::updateDialogNote,
             updateRating = viewModel::updateDialogRating,
-            updatePhoto = viewModel::updateEditDialogImage,
+            updateImageUri = viewModel::updateImageUri,
             onSaveButtonClick = viewModel::saveLiquid,
             updateAromaType = viewModel::updateAromaType,
+            onDeleteButtonClick = { viewModel.updateImageUri(null) },
         )
     }
+}
+
+@Composable
+fun LiquidCard(
+    state: SavedLiquidsState.Content.LiquidList.LiquidCardState,
+    onEditClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {},
+) {
+    var isExpanded by remember { mutableStateOf(false) }
+    Card(
+        modifier = Modifier
+            .padding(8.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .clickable { isExpanded = !isExpanded}
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Row {
+                FiveStarRatingSelector(
+                    modifier =Modifier
+                        .weight(1f),
+                    starSize = 22.dp,
+                    selectedStar = state.rating,
+                    clickable = false
+                )
+                Text(
+                    textAlign = TextAlign.Right,
+                    modifier =Modifier.weight(1f),
+                    text = state.steepingLabel?.asString() ?: ""
+                )
+            }
+            Row {
+                Text(
+                    textAlign = TextAlign.Left,
+                    modifier = Modifier
+                        .padding(vertical = 10.dp)
+                        .weight(1f),
+                    text = state.name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
+            }
+            Column(
+                modifier=Modifier
+                    .fillMaxWidth()
+            ){
+                AnimatedVisibility(visible = isExpanded){
+                    Column(modifier=Modifier
+                        .fillMaxWidth()){
+                        Text(text = state.quantityLabel.asString())
+                        Text(text = state.pgRatioLabel.asString())
+                        Text(text = state.aromaLabel.asString())
+                        Text(text = state.nicotineStrengthLabel.asString())
+                        if (state.noteLabel.isNotBlank()) {
+                            Text(text = state.noteLabel)
+                        }
+                        if (state.imageBox!=null) {
+                            ImageBox(
+                                state = state.imageBox,
+                                onClick = null,
+                            )
+                        }
+                        Row(modifier=Modifier
+                            .align(Alignment.Start)){
+                            IconButton(
+                                onClick = onEditClick,
+                                modifier = Modifier
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = stringResource(R.string.label_edit_liquid)
+                                )
+                            }
+                            IconButton(
+                                onClick = onDeleteClick,
+                                modifier = Modifier
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.DeleteForever,
+                                    contentDescription = stringResource(R.string.saved_liquids_delete_description)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun AddLiquidDialog(
     modifier: Modifier = Modifier,
-//    liquid: Liquid?,
     state: SavedLiquidsState.Dialog,
     closeDialog: () -> Unit,
     updateName: (String) -> Unit,
@@ -246,265 +237,104 @@ fun AddLiquidDialog(
     updateAdditive: (String) -> Unit,
     updateAroma: (String) -> Unit,
     updateNicotineStrength: (String) -> Unit,
-    updateSteepingDate: (String) -> Unit,
+    updateSteepingDate: (Long?) -> Unit,
     updateNote: (String) -> Unit,
     updateRating: (Int) -> Unit,
-    updatePhoto: (Bitmap) -> Unit,
+    updateImageUri: (uri: Uri?) -> Unit,
     onSaveButtonClick: () -> Unit,
     updateAromaType: (AromaType) -> Unit,
+    onDeleteButtonClick: () -> Unit,
+
 ) {
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val showDatePicker = remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
-    val filename by remember { mutableStateOf("") }
-    var nameError by remember { mutableStateOf(false) }
-    var isLoaded by remember { mutableStateOf(false) }
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
-    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
-    var tempImageUri by remember { mutableStateOf<Uri?>(null) }
-    var liquidId by remember { mutableIntStateOf(0) }
-    var liquidName by remember { mutableStateOf("") }
-    var liquidQuantity by remember { mutableStateOf("") }
-    var liquidPgRatio by remember { mutableIntStateOf(0) }
-    var liquidAromaRatio by remember { mutableStateOf("") }
-    var liquidAdditiveRatio by remember { mutableStateOf("") }
-    var liquidNicotineStrength by remember { mutableStateOf("") }
-    var liquidSteepingDate by remember { mutableStateOf("") }
-    var liquidNote by remember { mutableStateOf("") }
-    var liquidRating by remember { mutableIntStateOf(0) }
-    var liquidImageUri by remember { mutableStateOf("") }
-    fun rotateImage(source: Bitmap, angle: Float): Bitmap {
-        val matrix = Matrix()
-        matrix.postRotate(angle)
-        return Bitmap.createBitmap(
-            source, 0, 0, source.width, source.height,
-            matrix, true
-        )
-    }
-
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
-
+            if (it) {
+                updateImageUri(state.tempImageUri)
+            }
         }
 
-
-
-//    LaunchedEffect(true) {
-//        tempImageUri = getTempImageUri
-//        if(liquid!=null){
-//            liquidId=liquid.id
-//            liquidName=liquid.name
-//            liquidQuantity=liquid.quantity.toString()
-//            liquidPgRatio=liquid.pgRatio
-//            liquidAdditiveRatio=liquid.additiveRatio.toString()
-//            liquidAromaRatio=liquid.aromaRatio.toString()
-//            liquidNicotineStrength=liquid.nicotineStrength.toString()
-//            liquidSteepingDate=liquid.steepingDate
-//            liquidNote=liquid.note
-//            liquidRating=liquid.rating
-//            liquidImageUri=liquid.imageUri
-//            bitmap = if (liquidImageUri!="") {
-//                try {
-//                    val filepath = File(context.filesDir, liquidImageUri).absolutePath
-//                    BitmapFactory.decodeFile(filepath)
-//                } catch (e: Exception) {
-//                    null
-//                } finally {
-//                    isLoaded=true
-//                }
-//            } else {
-//                isLoaded=true
-//                null
-//            }
-//        } else {
-//            liquidId=0
-//            liquidName=""
-//            liquidQuantity=""
-//            liquidPgRatio=50
-//            liquidAdditiveRatio=""
-//            liquidAromaRatio=""
-//            liquidNicotineStrength=""
-//            liquidSteepingDate=""
-//            liquidNote=""
-//            liquidRating=0
-//            liquidImageUri=""
-//            bitmap=null
-//            isLoaded=true
-//        }
-//    }
 
     AlertDialog(
         modifier = modifier,
         onDismissRequest = closeDialog,
-        title = if (state.id==0) {
-            { Text(text = "Add liquid") }
-        }else {
-            { Text(text = "Edit liquid") }
-        },
+        title = { Text(text = state.titleLabel.asString()) },
         text = {
-            if (isLoaded) {
-                Column(
+            Column(
+                modifier = Modifier
+                    .verticalScroll(state = scrollState),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                VapeTextField(
+                    state = state.name,
+                    onValueChange = updateName,
+                    onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Next) },
+                )
+                LiquidParameters(
                     modifier = Modifier
-                        .verticalScroll(state = scrollState),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-
-//                        SliderTextField (
-//                            label = "Total quantity",
-//                            measure = "ml",
-//                            additiveRatio = liquidAdditiveRatio,
-//                            valueVar = liquidQuantity,
-//                            getValue = {liquidQuantity=it},
-//                            focus = focusManager,
-//                            getSliderValue = {liquidPgRatio=it.toInt()},
-//                            pgRatio = liquidPgRatio
-//                        )
-//                    Row {
-//                        OutlinedTextField(
-//                            modifier = Modifier
-//                                .weight(1f)
-//                                .padding(end = 4.dp),
-//                            value = liquidAromaRatio,
-//                            onValueChange = {liquidAromaRatio=it},
-//                            label = {
-//                                Text(text = "Aroma")
-//                            },
-//                            suffix = {
-//                                Text(text = "%")
-//                            },
-//                            keyboardOptions = KeyboardOptions(
-//                                keyboardType = KeyboardType.Number,
-//                                imeAction = ImeAction.Next
-//                            ),
-//                        )
-//                        OutlinedTextField(
-//                            modifier = Modifier
-//                                .weight(1f)
-//                                .padding(start = 4.dp),
-//                            value = liquidAdditiveRatio,
-//                            onValueChange = {liquidAdditiveRatio=it},
-//                            label = {
-//                                Text(text = "Additive (e.g. water)")
-//                            },
-//                            suffix = {
-//                                Text(text = "%")
-//                            },
-//                            keyboardOptions = KeyboardOptions(
-//                                keyboardType = KeyboardType.Number,
-//                                imeAction = ImeAction.Next
-//                            ),
-//                        )
-//                    }
-//                    OutlinedTextField(
-//                        value = liquidNicotineStrength,
-//                        onValueChange = {liquidNicotineStrength=it},
-//                        label = {
-//                            Text(text = "Nicotine strength")
-//                        },
-//                        suffix = {
-//                            Text(text = "mg/ml")
-//                        },
-//                        keyboardOptions = KeyboardOptions(
-//                            keyboardType = KeyboardType.Number,
-//                            imeAction = ImeAction.Next
-//                        ),
-//                    )
+                        .fillMaxWidth(),
+                    state = state.liquidParameters,
+                    onChangeAmount = updateQuantity,
+                    onSliderChangeAmount = updatePGRatio,
+                    onAromaValueChange = updateAroma,
+                    onAromaTypeChange = updateAromaType,
+                    onAdditiveValueChange = updateAdditive,
+                    onTargetNicotineValueChange = updateNicotineStrength,
+                )
+                Row {
                     VapeTextField(
-                        state = state.name,
-                        onValueChange = updateName,
+                        modifier = Modifier,
+                        state = state.steepingDate,
+                        onValueChange = {  },
                         onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Next) },
+                        onClick = { showDatePicker.value = true },
                     )
-                    LiquidParameters(
+                    IconButton(
+                        onClick = { updateSteepingDate(null) },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp),
-                        state = state.liquidParameters,
-                        onChangeAmount = updateQuantity,
-                        onSliderChangeAmount = updatePGRatio,
-                        onAromaValueChange = updateAroma,
-                        onAromaTypeChange = updateAromaType,
-                        onAdditiveValueChange = updateAdditive,
-                        onTargetNicotineValueChange = updateNicotineStrength,
-                    )
-                    Row {
-                        VapeTextField(
-                            state = state.steepingDate,
-                            onValueChange = updateSteepingDate,
-                            onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Next) },
+                            .weight(1f)
+                            .align(Alignment.CenterVertically)) {
+                        Icon(
+                            imageVector = Icons.Default.Backspace,
+                            contentDescription = stringResource(R.string.label_delete)
                         )
-//                        OutlinedTextField(
-//                            value = formatMillisToDate(state.steepingDate),
-//                            onValueChange = {
-//                            },
-//                            label = {
-//                                Text(text = "Steeping date")
-//                            },
-//                            enabled=false,
-//                            colors = OutlinedTextFieldDefaults.colors(
-//                                disabledTextColor = MaterialTheme.colorScheme.onSurface,
-//                                disabledContainerColor = Color.Transparent,
-//                                disabledBorderColor = MaterialTheme.colorScheme.outline,
-//                                disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-//                                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
-//                                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-//                                disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-//                                disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-//                                disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
-//                                disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant
-//                            ),
-//                            modifier = Modifier
-//                                .clickable { openDialog.value = true }
-//                                .weight(4f),
-//                        )
-                        IconButton(
-                            onClick = { updateSteepingDate("") },
-                            modifier = Modifier
-                                .weight(1f)
-                                .align(Alignment.CenterVertically)) {
-                            Icon(
-                                imageVector = Icons.Default.Backspace,
-                                contentDescription = "Delete"
-                            )
-                        }
                     }
-                    VapeTextField(
-                        state = state.note,
-                        onValueChange = updateNote,
-                        onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Next) },
-                    )
-//                    OutlinedTextField(
-//                        value = liquidNote,
-//                        onValueChange = {liquidNote=it},
-//                        label = {
-//                            Text(text = "Note")
-//                        },
-//                        )
-                    FiveStarRatingSelector(
-                        modifier= Modifier,
-                        starSize = 40.dp,
-                        selectedStar = state.rating,
-                        getValue = updateRating,
-                        clickable = true
-                    )
-                    ImageBox(
-                        imageUri = state.imageUri,
-                        onClick = {
-                            if (cameraPermissionState.status.isGranted) {
-                                tempImageUri?.let { launcher.launch(it) }
-                            } else {
-                                cameraPermissionState.launchPermissionRequest()
-                            }
-                        }
-                    )
                 }
+                VapeTextField(
+                    state = state.note,
+                    onValueChange = updateNote,
+                    onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Next) },
+                )
+
+                FiveStarRatingSelector(
+                    modifier= Modifier,
+                    starSize = 40.dp,
+                    selectedStar = state.rating,
+                    onStarClick = updateRating,
+                    clickable = true
+                )
+                ImageBox(
+                    state = state.imageUri,
+                    onClick = {
+                        if (cameraPermissionState.status.isGranted) {
+                            launcher.launch(state.tempImageUri)
+                        } else {
+                            cameraPermissionState.launchPermissionRequest()
+                        }
+                    },
+                    onClickDelete = onDeleteButtonClick,
+                )
             }
         },
         confirmButton = {
             TextButton(
                 onClick = onSaveButtonClick
             ) {
-                Text("Save")
+                Text(stringResource(R.string.label_save))
             }
         },
     )
@@ -517,12 +347,12 @@ fun AddLiquidDialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        updateSteepingDate(datePickerState.selectedDateMillis.toString())
+                        updateSteepingDate(datePickerState.selectedDateMillis)
                         showDatePicker.value = false
                     },
                     enabled = confirmEnabled
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.label_okay))
                 }
             },
             dismissButton = {
@@ -531,7 +361,7 @@ fun AddLiquidDialog(
                         showDatePicker.value = false
                     }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.label_cancel))
                 }
             }
         ) {
@@ -540,3 +370,29 @@ fun AddLiquidDialog(
     }
 }
 
+@Composable
+fun DeleteDialog(
+    state: SavedLiquidsState.DeleteDialog,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        title = {
+            Text(text = state.title)
+        },
+        text = {
+            Text(text = state.description.asString())
+        },
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(text = state.confirmButtonLabel.asString())
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss ) {
+                Text(text = state.cancelButtonLabel.asString())
+            }
+        },
+    )
+}

@@ -9,9 +9,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.geovnn.vapetools.helper.UiText
 
 
 @Composable
@@ -40,7 +39,7 @@ fun VapeComboBox(
                         modifier = Modifier
                     )
                     Text(
-                        text = item.string,
+                        text = item.label.asString(),
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier
                             .weight(1f)
@@ -58,7 +57,7 @@ data class VapeComboBoxState(
     val selectedItem: Item? = null,
 ) {
     data class Item(
-        val string: String,
-        val id: String
+        val id: String,
+        val label: UiText
     )
 }

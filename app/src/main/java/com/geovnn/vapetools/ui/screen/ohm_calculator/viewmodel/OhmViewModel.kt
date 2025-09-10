@@ -3,6 +3,8 @@ package com.geovnn.vapetools.ui.screen.ohm_calculator.viewmodel
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.geovnn.vapetools.R
+import com.geovnn.vapetools.helper.UiText
 import com.geovnn.vapetools.ui.common.composable.VapeTextFieldState
 import com.geovnn.vapetools.ui.common.composable.VapeTopAppBarState
 import com.geovnn.vapetools.ui.screen.ohm_calculator.state.OhmUiState
@@ -16,7 +18,8 @@ import java.util.Locale
 import kotlin.math.sqrt
 
 class OhmViewModel: ViewModel() {
-    val navBarFlow = flowOf(VapeTopAppBarState(title = "Ohm's Law Calculator"))
+    private val navBarFlow = flowOf(VapeTopAppBarState(title = UiText.StringResource(R.string.ohm_calculator_screen_title)))
+
     private val listState = MutableStateFlow<List<OhmUiState.FieldIDs>>(emptyList())
     val voltage = MutableStateFlow("")
     val resistance = MutableStateFlow("")
@@ -35,8 +38,8 @@ class OhmViewModel: ViewModel() {
             currentVoltage = OhmUiState.Content.Field(
                 id = OhmUiState.FieldIDs.VOLTAGE,
                 textField = VapeTextFieldState(
-                    label = "Voltage",
-                    measureUnit = "V",
+                    label = UiText.StringResource(R.string.label_voltage),
+                    measureUnit = UiText.StringResource(R.string.unit_v),
                     text = voltage,
                 ),
                 locked = lockedList.contains(OhmUiState.FieldIDs.VOLTAGE)
@@ -44,8 +47,8 @@ class OhmViewModel: ViewModel() {
             currentResistance = OhmUiState.Content.Field(
                 id = OhmUiState.FieldIDs.RESISTANCE,
                 textField = VapeTextFieldState(
-                    label = "Resistance",
-                    measureUnit = "Ω",
+                    label = UiText.StringResource(R.string.label_resistance),
+                    measureUnit = UiText.StringResource(R.string.unit_ohm),
                     text = resistance,
                 ),
                 locked = lockedList.contains(OhmUiState.FieldIDs.RESISTANCE)
@@ -53,8 +56,8 @@ class OhmViewModel: ViewModel() {
             currentCurrent = OhmUiState.Content.Field(
                 id = OhmUiState.FieldIDs.CURRENT,
                 textField = VapeTextFieldState(
-                    label = "Current",
-                    measureUnit = "A",
+                    label = UiText.StringResource(R.string.label_current),
+                    measureUnit = UiText.StringResource(R.string.unit_a),
                     text = current,
                 ),
                 locked = lockedList.contains(OhmUiState.FieldIDs.CURRENT)
@@ -62,8 +65,8 @@ class OhmViewModel: ViewModel() {
             currentWattage = OhmUiState.Content.Field(
                 id = OhmUiState.FieldIDs.WATTAGE,
                 textField = VapeTextFieldState(
-                    label = "Wattage",
-                    measureUnit = "W",
+                    label = UiText.StringResource(R.string.label_wattage),
+                    measureUnit = UiText.StringResource(R.string.unit_wattage),
                     text = wattage,
                 ),
                 locked = lockedList.contains(OhmUiState.FieldIDs.WATTAGE)

@@ -1,5 +1,6 @@
 package com.geovnn.vapetools.ui.screen.nicotine_blender.state
 
+import com.geovnn.vapetools.helper.UiText
 import com.geovnn.vapetools.ui.common.composable.VapeComboBoxState
 import com.geovnn.vapetools.ui.common.composable.VapeTextFieldState
 import com.geovnn.vapetools.ui.common.composable.VapeTopAppBarState
@@ -23,8 +24,8 @@ data class NicotineUiState(
         val result: ResultsBoxState = ResultsBoxState(),
     ) {
         data class ResultsBoxState(
-            val title: String = "",
-            val description: String = "",
+            val title: UiText? = null,
+            val description: UiText? = null,
             val isError: Boolean = false,
         )
     }

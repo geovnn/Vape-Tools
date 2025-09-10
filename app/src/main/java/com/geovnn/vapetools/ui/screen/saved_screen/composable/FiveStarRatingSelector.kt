@@ -17,7 +17,7 @@ fun FiveStarRatingSelector(
     modifier: Modifier,
     starSize: Dp,
     selectedStar: Int,
-    getValue: (Int) -> Unit,
+    onStarClick: ((Int) -> Unit)? = null,
     clickable:Boolean
 ) {
     val defaultStarColor: Color = LocalContentColor.current.copy()
@@ -80,7 +80,7 @@ fun FiveStarRatingSelector(
                 Modifier
                     .size(starSize)
                     .weight(1f)
-                    .clickable { getValue(1) }
+                    .clickable(enabled = onStarClick!=null) { onStarClick?.invoke(1) }
             } else {
                 Modifier
                     .size(starSize)
@@ -95,7 +95,7 @@ fun FiveStarRatingSelector(
                 Modifier
                     .size(starSize)
                     .weight(1f)
-                    .clickable { getValue(2) }
+                    .clickable(enabled = onStarClick!=null) { onStarClick?.invoke(2) }
             } else {
                 Modifier
                     .size(starSize)
@@ -110,7 +110,7 @@ fun FiveStarRatingSelector(
                 Modifier
                     .size(starSize)
                     .weight(1f)
-                    .clickable { getValue(3) }
+                    .clickable(enabled = onStarClick!=null) { onStarClick?.invoke(3) }
             } else {
                 Modifier
                     .size(starSize)
@@ -125,7 +125,7 @@ fun FiveStarRatingSelector(
                 Modifier
                     .size(starSize)
                     .weight(1f)
-                    .clickable { getValue(4) }
+                    .clickable(enabled = onStarClick!=null) { onStarClick?.invoke(4) }
             } else {
                 Modifier
                     .size(starSize)
@@ -140,7 +140,7 @@ fun FiveStarRatingSelector(
                 Modifier
                     .size(starSize)
                     .weight(1f)
-                    .clickable { getValue(5) }
+                    .clickable(enabled = onStarClick!=null) { onStarClick?.invoke(5) }
             } else {
                 Modifier
                     .size(starSize)

@@ -24,6 +24,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import com.geovnn.vapetools.helper.UiText
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -50,10 +51,10 @@ fun VapeDropdownMenu(
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Right
             ),
-            value = state.text,
+            value = state.text?.asString() ?: "",
             onValueChange = {  },
             singleLine = state.singleLine,
-            label = { Text(state.label) },
+            label = { Text(state.label?.asString() ?: "") },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
             colors = OutlinedTextFieldDefaults.colors(
                 disabledTextColor = OutlinedTextFieldDefaults.colors().unfocusedTextColor,
@@ -76,7 +77,7 @@ fun VapeDropdownMenu(
         ) {
             state.options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option.label) },
+                    text = { Text(option.label.asString()) },
                     onClick = {
                         onValueChange(option)
                         isExpanded = false
@@ -89,14 +90,14 @@ fun VapeDropdownMenu(
 }
 
 data class VapeDropdownMenuState(
-    val label: String = "",
-    val measureUnit: String = "",
-    val text: String = "",
+    val label: UiText? = null,
+    val measureUnit: UiText? = null,
+    val text: UiText? = null,
     val singleLine: Boolean = true,
     val options: List<Option> = emptyList()
 ) {
     data class Option(
         val id: String,
-        val label: String
+        val label: UiText
     )
 }

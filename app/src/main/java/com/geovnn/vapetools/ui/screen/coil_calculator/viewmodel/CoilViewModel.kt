@@ -2,10 +2,12 @@ package com.geovnn.vapetools.ui.screen.coil_calculator.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.geovnn.vapetools.combine
+import com.geovnn.vapetools.R
+import com.geovnn.vapetools.helper.combine
 import com.geovnn.vapetools.data.model.CoilMaterial
 import com.geovnn.vapetools.data.model.CoilType
-import com.geovnn.vapetools.roundTo1DecimalPlaces
+import com.geovnn.vapetools.helper.UiText
+import com.geovnn.vapetools.helper.roundTo1DecimalPlaces
 import com.geovnn.vapetools.ui.common.composable.VapeButtonState
 import com.geovnn.vapetools.ui.common.composable.VapeDropdownMenuState
 import com.geovnn.vapetools.ui.common.composable.VapeTextFieldState
@@ -38,8 +40,7 @@ class CoilViewModel : ViewModel() {
     val isOhmsError = MutableStateFlow(false)
 
     val lastSelectedField = MutableStateFlow(WRAPS_ID)
-    val navBarFlow = flowOf(VapeTopAppBarState(title = "Coil Calculator"))
-
+    val navBarFlow = flowOf(VapeTopAppBarState(title = UiText.StringResource(R.string.coil_calculator_screen_title)))
 
     val contentFlow = combine(
         setupType,
@@ -70,54 +71,76 @@ class CoilViewModel : ViewModel() {
         CoilUiState.Content(
             setupType = VapeDropdownMenuState(
                 options = CoilType.entries .map {
+                    val label = when (it) {
+                        CoilType.SINGLE -> UiText.StringResource(R.string.coil_type_single)
+                        CoilType.PARALLEL -> UiText.StringResource(R.string.coil_type_parallel)
+                        CoilType.TWIN -> UiText.StringResource(R.string.coil_type_twin)
+                        CoilType.TRIPLE -> UiText.StringResource(R.string.coil_type_triple)
+                        CoilType.QUAD -> UiText.StringResource(R.string.coil_type_quad)
+                    }
                     VapeDropdownMenuState.Option(
                         id = it.name,
-                        label = it.name
+                        label = label
                     )
                 },
-                label = "Setup",
-                text = setupType?.name ?: "",
+                label = UiText.StringResource(R.string.coil_calculator_label_coil_type),
+                text = when (setupType) {
+                    CoilType.SINGLE -> UiText.StringResource(R.string.coil_type_single)
+                    CoilType.PARALLEL -> UiText.StringResource(R.string.coil_type_parallel)
+                    CoilType.TWIN -> UiText.StringResource(R.string.coil_type_twin)
+                    CoilType.TRIPLE -> UiText.StringResource(R.string.coil_type_triple)
+                    CoilType.QUAD -> UiText.StringResource(R.string.coil_type_quad)
+                }
             ),
             material = VapeDropdownMenuState(
                 options = CoilMaterial.entries .map {
+                    val label = when (it) {
+                        CoilMaterial.KANTHAL_A1 -> UiText.StringResource(R.string.material_kanthal_a1)
+                        CoilMaterial.STAINLESS_STEEL_316L -> UiText.StringResource(R.string.material_ss316l)
+                        CoilMaterial.NICHROME_80 -> UiText.StringResource(R.string.material_ni80)
+                    }
                     VapeDropdownMenuState.Option(
                         id = it.name,
-                        label = it.name
+                        label = label
                     )
                 },
-                label = "Coil Material",
-                text = material?.name ?: "",
+                label = UiText.StringResource(R.string.coil_calculator_label_coil_material),
+                text = when (material) {
+                    CoilMaterial.KANTHAL_A1 -> UiText.StringResource(R.string.material_kanthal_a1)
+                    CoilMaterial.STAINLESS_STEEL_316L -> UiText.StringResource(R.string.material_ss316l)
+                    CoilMaterial.NICHROME_80 -> UiText.StringResource(R.string.material_ni80)
+                } ,
             ),
             wireDiameter = VapeTextFieldState(
-                label = "Wire diameter",
-                measureUnit = "mm",
+                label = UiText.StringResource(R.string.coil_calculator_label_wire_diameter),
+                measureUnit = UiText.StringResource(R.string.unit_mm),
                 text = wireDiameter,
                 isError = isWireDiameterError
             ),
             legLength = VapeTextFieldState(
-                label = "Leg length (total)",
-                measureUnit = "mm",
+                label = UiText.StringResource(R.string.coil_calculator_label_leg_length),
+                measureUnit = UiText.StringResource(R.string.unit_mm),
                 text = legLength,
                 isError = isLegLengthError
             ),
             innerDiameter = VapeTextFieldState(
-                label = "Coil inner diameter",
-                measureUnit = "mm",
+                label = UiText.StringResource(R.string.coil_calculator_label_coil_inner_diameter),
+                measureUnit = UiText.StringResource(R.string.unit_mm),
                 text = innerDiameter,
                 isError = isInnerDiameterError
             ),
             wraps = VapeTextFieldState(
-                label = "Wraps",
+                label = UiText.StringResource(R.string.coil_calculator_label_wraps),
                 text = wraps,
                 isError = isWrapsError
             ),
             ohms = VapeTextFieldState(
-                label = "Ohms",
-                measureUnit = "Ω",
+                label = UiText.StringResource(R.string.coil_calculator_label_ohms),
+                measureUnit = UiText.StringResource(R.string.unit_ohm),
                 text = ohms,
                 isError = isOhmsError
             ),
-            calculateButton = VapeButtonState(text = "Calculate")
+            calculateButton = VapeButtonState(text = UiText.StringResource(R.string.label_calculate))
         )
     }
 

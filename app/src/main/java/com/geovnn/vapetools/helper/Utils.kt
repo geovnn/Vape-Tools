@@ -1,10 +1,12 @@
-package com.geovnn.vapetools
+package com.geovnn.vapetools.helper
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Locale
 
 
@@ -306,4 +308,23 @@ fun Double.roundTo1DecimalPlaces(): String {
 
 fun Double.roundTo2DecimalPlaces(): String {
     return String.format(Locale.US, "%.2f", this)
+}
+
+fun millisToLocalDate(millis: Long?): LocalDate? {
+    return if (millis != null) {
+        val instant = Instant.ofEpochMilli(millis)
+        val zoneId = ZoneId.systemDefault()
+        val localDate = instant.atZone(zoneId).toLocalDate()
+        localDate
+    } else {
+        null
+    }
+}
+
+fun LocalDate.toFormattedString(): String {
+    val formatter = DateTimeFormatter
+        .ofLocalizedDate(FormatStyle.SHORT)
+        .withLocale(Locale.getDefault())
+
+    return this.format(formatter)
 }

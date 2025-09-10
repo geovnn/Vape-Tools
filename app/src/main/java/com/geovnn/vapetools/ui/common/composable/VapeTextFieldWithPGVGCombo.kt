@@ -17,14 +17,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.geovnn.vapetools.data.model.AromaType
+import com.geovnn.vapetools.helper.UiText
 
 @Composable
 fun VapeTextFieldWithPGVGCombo(
@@ -38,13 +37,15 @@ fun VapeTextFieldWithPGVGCombo(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val label = state.label?.asString() ?: ""
+        val suffix = state.measure?.asString() ?: ""
         OutlinedTextField(
             modifier = Modifier.weight(3f),
             value = state.textFieldValue,
             onValueChange = onValueChange,
             textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Right),
-            label = { Text(text = state.label) },
-            suffix = { Text(text = state.measure) },
+            label = { Text(text = label) },
+            suffix = { Text(text = suffix) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
@@ -92,8 +93,8 @@ fun VapeTextFieldWithPGVGCombo(
 }
 
 data class VapeTextFieldWithPGVGComboState(
-    val label: String = "",
-    val measure: String = "",
+    val label: UiText? = null,
+    val measure: UiText? = null,
     val textFieldValue: String = "",
     val selectedOption: AromaType = AromaType.PG,
 )

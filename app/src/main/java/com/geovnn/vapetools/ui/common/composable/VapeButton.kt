@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.geovnn.vapetools.helper.UiText
 
 @Composable
 fun VapeButton(
@@ -18,11 +19,11 @@ fun VapeButton(
         modifier = modifier,
         onClick = onClick
     ) {
-        Text(state.text)
+        Text(state.text?.asString() ?: "")
     }
 }
 
 data class VapeButtonState(
-    val text: String = "Calculate",
+    val text: UiText? = null,
     val isEnabled: Boolean = true
 )

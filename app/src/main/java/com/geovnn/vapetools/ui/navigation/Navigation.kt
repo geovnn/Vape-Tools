@@ -50,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -68,37 +69,38 @@ import com.geovnn.vapetools.ui.screen.ohm_calculator.viewmodel.OhmViewModel
 import com.geovnn.vapetools.ui.screen.saved_screen.viewmodel.SavedLiquidsViewModel
 import com.geovnn.vapetools.ui.screen.saved_screen.screen.SavedScreen
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
 @Composable
 fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
     val navController = rememberNavController()
     val items = listOf(
         NavigationItem(
-            title = "E-Liquid Calculator",
+            title = stringResource(R.string.liquid_calculator_screen_title),
             selectedIcon = Icons.Outlined.Science,
             unselectedIcon = Icons.Filled.Science,
             destination = "liquid_screen"
         ),
         NavigationItem(
-            title = "Nicotine Blender",
+            title = stringResource(R.string.nicotine_blender_screen_title),
             selectedIcon = Icons.Outlined.LocalDrink,
             unselectedIcon = Icons.Filled.LocalDrink,
             destination = "nicotine_screen"
         ),
         NavigationItem(
-            title = "Coil Calculator",
+            title = stringResource(R.string.coil_calculator_screen_title),
             selectedIcon = Icons.Outlined.ElectricBolt,
             unselectedIcon = Icons.Filled.ElectricBolt,
             destination = "coil_screen"
         ),
         NavigationItem(
-            title = "Ohm's Law",
+            title = stringResource(R.string.ohm_calculator_screen_title),
             selectedIcon = Icons.Outlined.Calculate,
             unselectedIcon = Icons.Filled.Calculate,
             destination = "ohm_screen"
         ),
         NavigationItem(
-            title = "Saved liquids",
+            title = stringResource(R.string.saved_liquids_screen_title),
             selectedIcon = Icons.Outlined.FolderSpecial,
             unselectedIcon = Icons.Filled.FolderSpecial,
             destination = "saved_screen"
@@ -155,7 +157,7 @@ fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
                     Spacer(modifier = Modifier.weight(1.0f))
                     NavigationDrawerItem(
                         label = {
-                            Text(text = "About")
+                            Text(text = stringResource(R.string.label_about))
                         },
                         selected = false,
 
@@ -168,7 +170,7 @@ fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
                         icon = {
                             Icon(
                                 Icons.Filled.Info,
-                                contentDescription = "About"
+                                contentDescription = stringResource(R.string.label_about)
                             )
                         },
                         modifier = Modifier
@@ -224,10 +226,9 @@ fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
                     )
                 }
                 composable(route = Screen.SavedScreen.route) {
-                    val viewModel = viewModel<OhmViewModel>()
-                    val uiState = viewModel.uiState.collectAsState()
+                    val uiState = savedLiquidViewModel.uiState.collectAsState()
                     SavedScreen(
-                        viewmodel = viewModel,
+                        viewModel = savedLiquidViewModel,
                         uiState = uiState.value,
                         openDrawer = { scope.launch { drawerState.open() } }
                     )
@@ -241,7 +242,7 @@ fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
 @Composable
 fun AboutDialog(getFlag: (Boolean) -> Unit) {
     val context = LocalContext.current
-    val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/geovnn")) }
+    val intent = remember { Intent(Intent.ACTION_VIEW, "https://github.com/geovnn".toUri()) }
 
     AlertDialog(
         onDismissRequest = {getFlag(false)
@@ -259,7 +260,7 @@ fun AboutDialog(getFlag: (Boolean) -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Vape Tools\nby Giovanni",
+                    text = stringResource(R.string.signature),
                     Modifier
                         .wrapContentSize(),
                     textAlign = TextAlign.Center,

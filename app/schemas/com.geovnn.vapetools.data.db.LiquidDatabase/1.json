@@ -1,19 +1,13 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "bd572cc599a2390eb347fc1a2017fa6b",
+    "version": 1,
+    "identityHash": "2b346ef82a315cea813086e9d9bc43a3",
     "entities": [
       {
-        "tableName": "LiquidDto",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `pgRatio` INTEGER NOT NULL, `additiveRatio` INTEGER NOT NULL, `aromaType` TEXT NOT NULL DEFAULT 'PG', `aromaRatio` INTEGER NOT NULL, `nicotineStrength` REAL NOT NULL, `steepingDate` TEXT, `note` TEXT NOT NULL, `rating` INTEGER NOT NULL, `imageUri` TEXT)",
+        "tableName": "Liquid",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `quantity` INTEGER NOT NULL, `pgRatio` INTEGER NOT NULL, `additiveRatio` INTEGER NOT NULL, `aromaRatio` INTEGER NOT NULL, `nicotineStrength` REAL NOT NULL, `steepingDate` TEXT NOT NULL, `note` TEXT NOT NULL, `rating` INTEGER NOT NULL, `imageUri` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "name",
             "columnName": "name",
@@ -39,13 +33,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "aromaType",
-            "columnName": "aromaType",
-            "affinity": "TEXT",
-            "notNull": true,
-            "defaultValue": "'PG'"
-          },
-          {
             "fieldPath": "aromaRatio",
             "columnName": "aromaRatio",
             "affinity": "INTEGER",
@@ -61,7 +48,7 @@
             "fieldPath": "steepingDate",
             "columnName": "steepingDate",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "note",
@@ -79,7 +66,13 @@
             "fieldPath": "imageUri",
             "columnName": "imageUri",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -95,7 +88,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bd572cc599a2390eb347fc1a2017fa6b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2b346ef82a315cea813086e9d9bc43a3')"
     ]
   }
 }

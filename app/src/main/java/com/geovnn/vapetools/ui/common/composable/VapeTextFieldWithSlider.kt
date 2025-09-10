@@ -25,6 +25,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.geovnn.vapetools.helper.UiText
 import kotlin.math.roundToInt
 
 @Composable
@@ -39,13 +40,15 @@ fun VapeTextFieldWithSlider(
         Row(
             verticalAlignment = Alignment.Top
         ) {
+            val label = state.textFieldLabel?.asString() ?: ""
+            val suffix = state.textFieldSuffix?.asString() ?: ""
             OutlinedTextField(
                 modifier = Modifier.weight(3f),
                 value = state.textFieldValue,
                 onValueChange = { onTextFieldValueChange(it) },
                 textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Right),
-                label = { Text(text = state.textFieldLabel) },
-                suffix = { Text(text = state.textFieldSuffix) },
+                label = { Text(text = label) },
+                suffix = { Text(text = suffix) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -100,8 +103,8 @@ fun VapeTextFieldWithSlider(
 }
 
 data class VapeTextFieldWithSliderState(
-    val textFieldLabel: String = "",
-    val textFieldSuffix: String = "",
+    val textFieldLabel: UiText? = null,
+    val textFieldSuffix: UiText? = null,
     val textFieldValue: String = "",
     val pgRatio: Float = 0f,
     val vgRatio: Float = 0f,

@@ -2,9 +2,10 @@ package com.geovnn.vapetools.ui.screen.liquid_calculator.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.geovnn.vapetools.combine
+import com.geovnn.vapetools.R
+import com.geovnn.vapetools.helper.combine
 import com.geovnn.vapetools.data.model.AromaType
-import com.geovnn.vapetools.roundTo2DecimalPlaces
+import com.geovnn.vapetools.helper.UiText
 import com.geovnn.vapetools.ui.common.composable.LiquidParametersState
 import com.geovnn.vapetools.ui.common.composable.VapeTopAppBarState
 import com.geovnn.vapetools.ui.common.composable.VapeTextFieldState
@@ -27,7 +28,7 @@ class LiquidViewModel: ViewModel() {
     val nicotineShotStrength = MutableStateFlow("")
     val nicotineShotPGRatio = MutableStateFlow(50f)
 
-    val navBarFlow = flowOf(VapeTopAppBarState(title = "Liquid Calculator"))
+    val navBarFlow = flowOf(VapeTopAppBarState(title = UiText.StringResource(R.string.liquid_calculator_screen_title)))
 
     val liquidParametersStateFlow = combine(
         targetAmountText,
@@ -48,32 +49,32 @@ class LiquidViewModel: ViewModel() {
         nicotineShotPGRatio ->
         LiquidParametersState(
             amount = VapeTextFieldWithSliderState(
-                textFieldLabel = "Target Total Amount",
-                textFieldSuffix = "ml",
+                textFieldLabel = UiText.StringResource(R.string.label_target_total_amount),
+                textFieldSuffix = UiText.StringResource(R.string.unit_ml),
                 textFieldValue = targetAmountText,
                 pgRatio = targetAmountPGRatio,
                 vgRatio = 100f - targetAmountPGRatio - (targetAdditiveText.toFloatOrNull() ?: 0f),
                 additiveRatio = targetAdditiveText.toFloatOrNull() ?: 0f
             ),
             aroma = VapeTextFieldWithPGVGComboState(
-                label = "Target aroma level",
-                measure = "%",
+                label = UiText.StringResource(R.string.label_target_aroma_percentage),
+                measure =UiText.StringResource(R.string.unit_percentage),
                 textFieldValue = targetAromaText,
                 selectedOption = targetAromaType
             ),
             additive = VapeTextFieldState(
-                label = "Additive (e.g. water)",
-                measureUnit = "%",
+                label = UiText.StringResource(R.string.label_additive_extended),
+                measureUnit = UiText.StringResource(R.string.unit_percentage),
                 text = targetAdditiveText
             ),
             targetNicotineStrength = VapeTextFieldState(
-                label = "Target nicotine strength",
-                measureUnit = "mg/ml",
+                label = UiText.StringResource(R.string.label_target_nicotine_strength),
+                measureUnit = UiText.StringResource(R.string.unit_mg_ml),
                 text = targetNicotineStrength
             ),
             nicotineShotStrength = VapeTextFieldWithSliderState(
-                textFieldLabel = "Nicotine shot strength",
-                textFieldSuffix = "mg/ml",
+                textFieldLabel = UiText.StringResource(R.string.label_nicotine_shot_strength),
+                textFieldSuffix = UiText.StringResource(R.string.unit_mg_ml),
                 textFieldValue = nicotineShotStrength,
                 pgRatio = nicotineShotPGRatio,
                 vgRatio = 100f - nicotineShotPGRatio,
@@ -88,7 +89,7 @@ class LiquidViewModel: ViewModel() {
         val targetVGRatio = settings.amount.vgRatio.toDouble()
 
         val targetAromaRatio = settings.aroma.textFieldValue.toDoubleOrNull() ?: 0.0
-        val targetAromaType = settings.aroma.selectedOption.name
+        val targetAromaType = settings.aroma.selectedOption
 
         val targetAdditiveRatio = settings.additive.text.toDoubleOrNull() ?: 0.0
 
@@ -103,8 +104,8 @@ class LiquidViewModel: ViewModel() {
         } else 0.0
 
         val aromaAmount = targetAmount * (targetAromaRatio / 100)
-        val aromaPGAmount = if (targetAromaType == "PG") aromaAmount else 0.0
-        val aromaVGAmount = if (targetAromaType == "VG") aromaAmount else 0.0
+        val aromaPGAmount = if (targetAromaType == AromaType.PG) aromaAmount else 0.0
+        val aromaVGAmount = if (targetAromaType == AromaType.VG) aromaAmount else 0.0
 
         val pgAmount = targetAmount * (targetPGRatio / 100) - (nicotineAmount * (nicotineShotPGRatio / 100)) - aromaPGAmount
         val vgAmount = targetAmount * (targetVGRatio / 100) - (nicotineAmount * (nicotinVGRatio / 100)) - aromaVGAmount
@@ -114,47 +115,48 @@ class LiquidViewModel: ViewModel() {
         val ingredients = buildList {
             if (pgAmount!=0.0) add(
                 LiquidUiState.LiquidsResultsBoxState.Ingredient(
-                    name = "PG",
-                    volume = "${pgAmount.roundTo2DecimalPlaces()} ml",
-                    weight = "${pgVolumeToWeight(pgAmount).roundTo2DecimalPlaces()} g"
+                    name = UiText.StringResource(R.string.unit_pg),
+                    volume = UiText.StringResource(R.string.num_pg_volume,pgAmount),
+                    weight = UiText.StringResource(R.string.num_grams,pgVolumeToWeight(pgAmount))
                 ))
             if (vgAmount!=0.0) add(
                 LiquidUiState.LiquidsResultsBoxState.Ingredient(
-                    name = "VG",
-                    volume = "${vgAmount.roundTo2DecimalPlaces()} ml",
-                    weight = "${vgVolumeToWeight(vgAmount).roundTo2DecimalPlaces()} g"
-                ))
+                    name = UiText.StringResource(R.string.unit_vg),
+                    volume = UiText.StringResource(R.string.num_vg_volume,vgAmount),
+                    weight = UiText.StringResource(R.string.num_grams,vgVolumeToWeight(vgAmount))
+                )
+            )
             if (aromaAmount != 0.0) add(
                 LiquidUiState.LiquidsResultsBoxState.Ingredient(
-                    name = "Aroma ($targetAromaType)",
-                    volume = "${aromaAmount.roundTo2DecimalPlaces()} ml",
-                    weight = "${
-                        (
-                            if (targetAromaType == "PG") pgVolumeToWeight(volume = aromaAmount)
-                            else vgVolumeToWeight(volume = aromaAmount)
-                                ).roundTo2DecimalPlaces()
-                            } g"
+                    name = when (targetAromaType) {
+                        AromaType.PG ->  UiText.StringResource(R.string.label_aroma_pg)
+                        AromaType.VG -> UiText.StringResource(R.string.label_aroma_vg)
+                    },
+                    volume = UiText.StringResource(R.string.num_aroma_volume,aromaAmount),
+                    weight = UiText.StringResource(R.string.num_grams,
+                        if (targetAromaType == AromaType.PG) pgVolumeToWeight(volume = aromaAmount)
+                        else vgVolumeToWeight(volume = aromaAmount))
                 ))
             if (additiveAmount != 0.0) add(
                 LiquidUiState.LiquidsResultsBoxState.Ingredient(
-                    name = "Additive",
-                    volume = "${additiveAmount.roundTo2DecimalPlaces()} ml",
-                    weight = ""
+                    name = UiText.StringResource(R.string.label_additive_extended),
+                    volume =  UiText.StringResource(R.string.unit_ml,additiveAmount),
+                    weight = null
                 ))
             if (nicotineAmount != 0.0) add(
                 LiquidUiState.LiquidsResultsBoxState.Ingredient(
-                    name = "Nicotine shot",
-                    volume = "${nicotineAmount.roundTo2DecimalPlaces()} ml",
-                    weight = "${pgVgRatioToWeight(pgRatio = nicotineShotPGRatio, amount = nicotineAmount).roundTo2DecimalPlaces()} g"
+                    name = UiText.StringResource(R.string.label_nicotine_shot),
+                    volume = UiText.StringResource(R.string.num_nicotine_volume,nicotineAmount),
+                    weight = UiText.StringResource(R.string.num_grams,pgVgRatioToWeight(pgRatio = nicotineShotPGRatio, amount = nicotineAmount))
                 ))
         }
         val isError = pgAmount < 0 || vgAmount < 0 || aromaAmount < 0 || additiveAmount < 0 || nicotineAmount < 0
         LiquidUiState.LiquidsResultsBoxState(
-            title = "Results",
+            title = UiText.StringResource(R.string.label_results),
             description = when {
-                isError -> "This liquid cannot be made with the given parameters"
-                ingredients.isEmpty() -> "Fill more inputs to see the recipe"
-                else -> "To make this liquid you need:"
+                isError -> UiText.StringResource(R.string.error_liquid_invalid_input)
+                ingredients.isEmpty() -> UiText.StringResource(R.string.error_liquid_not_enough_input)
+                else -> UiText.StringResource(R.string.label_liquid_you_need)
             },
             ingredients = ingredients,
             isError = isError

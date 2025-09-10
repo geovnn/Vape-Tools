@@ -25,7 +25,10 @@ class MainActivity : ComponentActivity() {
 
     // Crea un'istanza del repository
     private val liquidRepository by lazy {
-        LiquidRepository(db.dao)
+        LiquidRepository(
+            liquidDao = db.dao,
+            context = applicationContext
+        )
     }
 
 
