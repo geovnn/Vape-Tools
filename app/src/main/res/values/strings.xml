@@ -87,7 +87,7 @@
     <string name="label_wattage">Wattage</string>
     <string name="unit_wattage">W</string>
     <string name="label_about">About</string>
-    <string name="signature">\"Vape Tools by Giovanni\"</string>
+    <string name="signature">Vape Tools by Giovanni</string>
     <string name="label_okay">Okay</string>
 
 </resources>
