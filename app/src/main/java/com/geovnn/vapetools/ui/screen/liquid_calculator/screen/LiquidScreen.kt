@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.keepScreenOn
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.geovnn.vapetools.data.model.AromaType
@@ -40,7 +41,9 @@ fun LiquidScreen(
     onNicotineShotSliderChange: (Float) -> Unit
 ) {
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .keepScreenOn(),
         topBar = {
             VapeTopAppBar(
                 modifier = Modifier,
