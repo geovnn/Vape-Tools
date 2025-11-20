@@ -1,19 +1,19 @@
 <resources>
     <string name="app_name">Vape Tools</string>
 
-    <string name="label_target_total_amount">Target Total amount</string>
-    <string name="label_target_aroma_percentage">Target aroma percentage</string>
+    <string name="label_target_total_amount">Quantity</string>
+    <string name="label_target_aroma_percentage">Aroma</string>
     <string name="label_additive_extended">Additive (e.g. water)</string>
     <string name="label_additive">Additive</string>
-    <string name="label_target_nicotine_strength">Target nicotine strength</string>
-    <string name="label_nicotine_shot_strength">Nicotine shot strength</string>
-    <string name="label_aroma_pg">Aroma (PG)</string>
-    <string name="label_aroma_vg">Aroma (VG)</string>
-    <string name="label_nicotine_shot">Nicotine Shot</string>
+    <string name="label_target_nicotine_strength">Nicotine</string>
+    <string name="label_nicotine_shot_strength">Nicotine shot</string>
+    <string name="label_aroma_pg">Aroma</string>
+    <string name="label_aroma_vg">Aroma</string>
+    <string name="label_nicotine_shot">Nicotine</string>
     <string name="label_results">Results:</string>
-    <string name="label_add_nicotine">Add Nicotine</string>
-    <string name="label_remove_nicotine">Remove Nicotine</string>
-    <string name="label_current_nicotine_strength">Current nicotine strength</string>
+    <string name="label_add_nicotine">Add</string>
+    <string name="label_remove_nicotine">Remove</string>
+    <string name="label_current_nicotine_strength">Current strength</string>
     <string name="label_target_strength">Target strength</string>
     <string name="label_calculate">Calculate</string>
     <string name="label_steeping_date">Steeping Date</string>
@@ -42,8 +42,8 @@
     <string name="label_liquid_you_need">To make this liquid you need:</string>
 
     <string name="nicotine_blender_screen_title">Nicotine Blender</string>
-    <string name="nicotine_blender_label_increase_nicotine">Increase nicotine</string>
-    <string name="nicotine_blender_label_decrease_nicotine">Decrease nicotine</string>
+    <string name="nicotine_blender_label_increase_nicotine">Increase</string>
+    <string name="nicotine_blender_label_decrease_nicotine">Decrease</string>
     <string name="nicotine_blender_error_target_must_be_greater">Target strength must be greater than current strength</string>
     <string name="nicotine_blender_error_target_must_be_less">Target strength must be less than current strength</string>
     <string name="nicotine_blender_error_not_enough_inputs">Fill more inputs to see the recipe</string>
@@ -51,11 +51,11 @@
     <string name="nicotine_blender_result_remove">Add %.2f ml of nicotine free base (Aroma will be %d%% less intense)</string>
 
     <string name="coil_calculator_screen_title">Coil Calculator</string>
-    <string name="coil_calculator_label_coil_type">Coil Type</string>
-    <string name="coil_calculator_label_coil_material">Coil Material</string>
+    <string name="coil_calculator_label_coil_type">Type</string>
+    <string name="coil_calculator_label_coil_material">Material</string>
     <string name="coil_calculator_label_wire_diameter">Wire Diameter</string>
     <string name="coil_calculator_label_leg_length">Leg length (total)</string>
-    <string name="coil_calculator_label_coil_inner_diameter">Coil inner diameter</string>
+    <string name="coil_calculator_label_coil_inner_diameter">Inner diameter</string>
     <string name="coil_calculator_label_wraps">Wraps</string>
     <string name="coil_calculator_label_ohms">Ohms</string>
     <string name="material_kanthal_a1">Kanthal A1</string>
