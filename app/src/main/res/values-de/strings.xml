@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vape Tools</string>
+
+    <string name="label_target_total_amount">Menge</string>
+    <string name="label_target_aroma_percentage">Aroma</string>
+    <string name="label_additive_extended">Zusatzstoff (z. B. Wasser)</string>
+    <string name="label_additive">Zusatzstoff</string>
+    <string name="label_target_nicotine_strength">Nikotin</string>
+    <string name="label_nicotine_shot_strength">Nikotin-Shot</string>
+    <string name="label_aroma_pg">Aroma</string>
+    <string name="label_aroma_vg">Aroma</string>
+    <string name="label_nicotine_shot">Nikotin</string>
+    <string name="label_results">Ergebnisse:</string>
+    <string name="label_add_nicotine">Hinzufügen</string>
+    <string name="label_remove_nicotine">Entfernen</string>
+    <string name="label_current_nicotine_strength">Aktuelle Stärke</string>
+    <string name="label_target_strength">Gewünschte Stärke</string>
+    <string name="label_calculate">Berechnen</string>
+    <string name="label_steeping_date">Reifedatum</string>
+    <string name="label_note">Notizen</string>
+    <string name="label_save">Speichern</string>
+    <string name="label_cancel">Abbrechen</string>
+    <string name="label_confirm">Bestätigen</string>
+    <string name="label_delete">Löschen</string>
+
+    <string name="unit_ml">ml</string>
+    <string name="unit_percentage">%%</string>
+    <string name="unit_mg_ml">mg/ml</string>
+    <string name="unit_pg">PG</string>
+    <string name="unit_vg">VG</string>
+    <string name="unit_mm">mm</string>
+    <string name="unit_ohm">Ω</string>
+    <string name="num_pg_volume">%.2f ml</string>
+    <string name="num_vg_volume">%.2f ml</string>
+    <string name="num_aroma_volume">%.2f ml</string>
+    <string name="num_nicotine_volume">%.2f ml</string>
+    <string name="num_grams">%.2f g</string>
+
+    <string name="liquid_calculator_screen_title">Liquid-Rechner</string>
+    <string name="error_liquid_invalid_input">Dieses Liquid kann mit den angegebenen Parametern nicht hergestellt werden</string>
+    <string name="error_liquid_not_enough_input">Fülle mehr Felder aus, um das Rezept zu sehen</string>
+    <string name="label_liquid_you_need">Um dieses Liquid herzustellen, brauchst du:</string>
+
+    <string name="nicotine_blender_screen_title">Nikotin-Mischer</string>
+    <string name="nicotine_blender_label_increase_nicotine">Erhöhen</string>
+    <string name="nicotine_blender_label_decrease_nicotine">Verringern</string>
+    <string name="nicotine_blender_error_target_must_be_greater">Die Zielstärke muss höher als die aktuelle Stärke sein</string>
+    <string name="nicotine_blender_error_target_must_be_less">Die Zielstärke muss niedriger als die aktuelle Stärke sein</string>
+    <string name="nicotine_blender_error_not_enough_inputs">Fülle mehr Felder aus, um das Rezept zu sehen</string>
+    <string name="nicotine_blender_result_add">Füge %.2f ml Nikotin-Shot hinzu (Aroma wird um %d%% weniger intensiv sein)</string>
+    <string name="nicotine_blender_result_remove">Füge %.2f ml nikotinfreie Basis hinzu (Aroma wird um %d%% weniger intensiv sein)</string>
+
+    <string name="coil_calculator_screen_title">Coil-Rechner</string>
+    <string name="coil_calculator_label_coil_type">Typ</string>
+    <string name="coil_calculator_label_coil_material">Material</string>
+    <string name="coil_calculator_label_wire_diameter">Drahtdurchmesser</string>
+    <string name="coil_calculator_label_leg_length">Beinlänge (gesamt)</string>
+    <string name="coil_calculator_label_coil_inner_diameter">Innendurchmesser</string>
+    <string name="coil_calculator_label_wraps">Windungen</string>
+    <string name="coil_calculator_label_ohms">Ohm</string>
+    <string name="material_kanthal_a1">Kanthal A1</string>
+    <string name="material_ss316l">Edelstahl 316L</string>
+    <string name="material_ni80">NiChrome 80</string>
+    <string name="coil_type_single">Single</string>
+    <string name="coil_type_parallel">Parallel</string>
+    <string name="coil_type_twin">Twin</string>
+    <string name="coil_type_triple">Triple</string>
+    <string name="coil_type_quad">Quad</string>
+
+    <string name="saved_liquids_screen_title">Gespeicherte Liquids</string>
+    <string name="saved_liquids_steeping_for_days">Reift seit %d Tagen</string>
+    <string name="saved_liquids_delete_description">Bist du sicher, dass du dieses Liquid löschen willst?</string>
+    <string name="saved_liquids_card_quantity">Menge: %d ml</string>
+    <string name="saved_liquids_card_pg_vg">%dPG/%dVG</string>
+    <string name="saved_liquids_card_pg_vg_a">%1$dPG/%2$dVG/%3$d Zusatzstoff</string>
+    <string name="saved_liquids_card_aroma">Aroma: %d%%</string>
+    <string name="saved_liquids_card_nicotine">Nikotin: %.1f mg/ml</string>
+    <string name="label_name">Name</string>
+    <string name="label_edit_liquid">Liquid bearbeiten</string>
+    <string name="label_new_liquid">Neues Liquid</string>
+
+    <string name="ohm_calculator_screen_title">Ohm-Rechner</string>
+    <string name="label_voltage">Spannung</string>
+    <string name="unit_v">V</string>
+    <string name="label_resistance">Widerstand</string>
+    <string name="label_current">Strom</string>
+    <string name="unit_a">A</string>
+    <string name="label_wattage">Leistung</string>
+    <string name="unit_wattage">W</string>
+
+    <string name="label_about">Info</string>
+    <string name="signature">Vape Tools von Giovanni</string>
+    <string name="label_okay">OK</string>
+
+</resources>
