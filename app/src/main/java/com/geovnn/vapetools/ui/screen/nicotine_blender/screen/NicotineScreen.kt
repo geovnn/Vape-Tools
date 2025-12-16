@@ -27,12 +27,13 @@ import com.geovnn.vapetools.ui.common.composable.VapeTextField
 import com.geovnn.vapetools.ui.common.composable.VapeTopAppBar
 import com.geovnn.vapetools.ui.screen.nicotine_blender.state.NicotineUiState
 import com.geovnn.vapetools.ui.screen.nicotine_blender.viewmodel.NicotineViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NicotineScreen(
     openDrawer: () -> Unit,
-    viewModel: NicotineViewModel = viewModel(),
+    viewModel: NicotineViewModel = koinViewModel(),
     uiState: NicotineUiState,
 ){
     Scaffold(

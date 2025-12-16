@@ -30,11 +30,12 @@ import com.geovnn.vapetools.ui.common.composable.VapeTextField
 import com.geovnn.vapetools.ui.common.composable.VapeTopAppBar
 import com.geovnn.vapetools.ui.screen.ohm_calculator.state.OhmUiState
 import com.geovnn.vapetools.ui.screen.ohm_calculator.viewmodel.OhmViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OhmScreen(
-    viewModel: OhmViewModel,
+    viewModel: OhmViewModel = koinViewModel(),
     uiState: OhmUiState,
     openDrawer: () -> Unit,
 ) {

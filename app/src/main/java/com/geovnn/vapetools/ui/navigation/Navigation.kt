@@ -70,9 +70,10 @@ import com.geovnn.vapetools.ui.screen.saved_screen.viewmodel.SavedLiquidsViewMod
 import com.geovnn.vapetools.ui.screen.saved_screen.screen.SavedScreen
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
+fun Navigation() {
     val navController = rememberNavController()
     val items = listOf(
         NavigationItem(
@@ -183,7 +184,7 @@ fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
         ) {
             NavHost(navController = navController, startDestination = Screen.LiquidScreen.route) {
                 composable(route = Screen.LiquidScreen.route) {
-                    val viewModel = viewModel<LiquidViewModel>()
+                    val viewModel: LiquidViewModel = koinViewModel()
                     val uiState = viewModel.uiState.collectAsState()
                     LiquidScreen(
                         uiState = uiState.value,
@@ -199,7 +200,7 @@ fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
                     )
                 }
                 composable(route = Screen.NicotineScreen.route) {
-                    val viewModel = viewModel<NicotineViewModel>()
+                    val viewModel: NicotineViewModel = koinViewModel()
                     val uiState = viewModel.uiState.collectAsState()
                     NicotineScreen(
                         openDrawer = { scope.launch { drawerState.open() } },
@@ -208,7 +209,7 @@ fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
                     )
                 }
                 composable(route = Screen.CoilScreen.route) {
-                    val viewModel = viewModel<CoilViewModel>()
+                    val viewModel: CoilViewModel = koinViewModel()
                     val uiState = viewModel.uiState.collectAsState()
                     CoilScreen(
                         coilViewModel = viewModel,
@@ -217,7 +218,7 @@ fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
                     )
                 }
                 composable(route = Screen.OhmScreen.route) {
-                    val viewModel = viewModel<OhmViewModel>()
+                    val viewModel: OhmViewModel = koinViewModel()
                     val uiState = viewModel.uiState.collectAsState()
                     OhmScreen(
                         viewModel = viewModel,
@@ -226,9 +227,10 @@ fun Navigation(savedLiquidViewModel: SavedLiquidsViewModel) {
                     )
                 }
                 composable(route = Screen.SavedScreen.route) {
-                    val uiState = savedLiquidViewModel.uiState.collectAsState()
+                    val viewModel: SavedLiquidsViewModel = koinViewModel()
+                    val uiState = viewModel.uiState.collectAsState()
                     SavedScreen(
-                        viewModel = savedLiquidViewModel,
+                        viewModel = viewModel,
                         uiState = uiState.value,
                         openDrawer = { scope.launch { drawerState.open() } }
                     )

@@ -60,11 +60,12 @@ import com.geovnn.vapetools.ui.screen.saved_screen.viewmodel.SavedLiquidsViewMod
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SavedScreen(
-    viewModel: SavedLiquidsViewModel,
+    viewModel: SavedLiquidsViewModel = koinViewModel(),
     uiState: SavedLiquidsState,
     openDrawer: () -> Unit,
 ) {
